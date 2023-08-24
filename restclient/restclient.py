@@ -22,6 +22,9 @@ class RestClient:
     def put(self, path: str, **kwargs) -> Response:
         return self._send_requests('PUT', path, **kwargs)
 
+    def delete(self, path: str, **kwargs) -> Response:
+        return self._send_requests('DELETE', path, **kwargs)
+
     def _send_requests(self, method, path, **kwargs):
         full_url = self.host + path
         log = self.log.bind(event_id=str(uuid.uuid4()))

@@ -9,14 +9,14 @@ class MailhogApi:
         self.host = host
         self.client = RestClient(host=host)
 
-    def get_api_v2_messges(self, limit: int = 50) -> Response:
+    def get_api_v2_messages(self, limit: int = 50) -> Response:
         """
         Get messages by limit
         :param limit:
         :return:
         """
         response = self.client.get(
-            path=f"/api/v2/messages?limit=50",
+            path=f"/api/v2/messages",
             params={
                 'limit': limit
             }
@@ -30,7 +30,7 @@ class MailhogApi:
         :return:
         """
 
-        emails = self.get_api_v2_messges(1).json()
+        emails = self.get_api_v2_messages(1).json()
         token_url = json.loads(emails['items'][0]['Content']['Body'])['ConfirmationLinkUrl']
         token = token_url.split('/')[-1]
         return token
