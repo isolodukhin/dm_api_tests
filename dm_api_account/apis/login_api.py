@@ -1,7 +1,7 @@
 from requests import Response
 from ..models import login_credentials_model
 from requests import session
-
+from dm_api_account.models.user_envelope_model import UserEnvelopeModel
 
 class LoginApi:
 
@@ -23,6 +23,7 @@ class LoginApi:
             json=json,
             **kwargs
         )
+        UserEnvelopeModel(**response.json())
         return response
 
     def delete_v1_account_login(self, **kwargs):
