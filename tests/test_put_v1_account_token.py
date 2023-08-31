@@ -1,7 +1,11 @@
+import time
+
 from services.dm_api_account import DmApiAccount
 from services.mailhog import MailhogApi
 import structlog
-from dm_api_account.models.registration_model import RegistrationModel
+from dm_api_account.models.registration_model import Registration
+from hamcrest import *
+from dm_api_account.models.user_envelope_model import UserRole
 
 structlog.configure(
     processors=[
@@ -13,15 +17,22 @@ structlog.configure(
 def test_put_v1_account_token():
     mailhog = MailhogApi(host='http://5.63.153.31:5025')
     api = DmApiAccount(host='http://5.63.153.31:5051')
-    login = "fkweasak444fewf44"
+    login = "fkw33"
     password = "aaaafadad"
-    email = "qwdwsqdd1s1s235@dqwdq.com"
-    json = RegistrationModel(
+    email = "qwd33@dqwdq.com"
+    json = Registration(
         login=login,
         email=email,
         password=password
     )
     response = api.account.post_v1_account(json=json)
-    assert response.status_code == 201, f'Статус код ответа должен быть равен 201, но он равен {response.status_code}'
+    time.sleep(2)
     token = mailhog.get_token_from_last_email()
-    response = api.account.put_v1_account_token(token=token)
+    response = api.account.put_v1_account_token(token=token, status_code=200)
+    assert_that(response.resource, has_properties(
+        {
+            "login": "fkw30",
+            "roles": [UserRole.guest, UserRole.player]
+        }
+    ))
+    assert_that(response.resource.rating, not_none())

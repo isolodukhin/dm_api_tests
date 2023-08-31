@@ -1,7 +1,7 @@
 from requests import Response
-from ..models.login_credentials_model import LoginCredentialsModel
+from ..models import *
 from restclient.restclient import RestClient
-from dm_api_account.models.user_envelope_model import UserEnvelopeModel
+from dm_api_account.models.user_envelope_model import UserEnvelope
 
 
 class LoginApi:
@@ -12,9 +12,11 @@ class LoginApi:
         if headers:
             self.client.session.headers.update(headers)
 
-    def post_v1_account_login(self, json: LoginCredentialsModel, **kwargs) -> Response:
+    def post_v1_account_login(self, json: LoginCredentials, status_code: int = 201,
+                              **kwargs) -> Response | UserEnvelope:
         """
         Authenticate via credentials
+        :param status_code:
         :param json: login_credentials_model
         :return:
         """
@@ -24,7 +26,8 @@ class LoginApi:
             json=json.model_dump(by_alias=True, exclude_none=True),
             **kwargs
         )
-        UserEnvelopeModel(**response.json())
+        if response.status_code == 200:
+            return UserEnvelope(**response.json())
         return response
 
     def delete_v1_account_login(self, **kwargs):
