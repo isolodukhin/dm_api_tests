@@ -1,5 +1,6 @@
 from requests import Response
 from ..models import *
+from dm_api_account.models.user_details_envelope_model import UserDetailsEnvelope
 from restclient.restclient import RestClient
 from ..utilities import validate_request_json, validate_status_code
 
@@ -127,7 +128,7 @@ class AccountApi:
             self,
             status_code: int = 200,
             **kwargs
-    ) -> Response | UserEnvelope:
+    ) -> Response | UserDetailsEnvelope:
         """
         Get current user
         :return:
@@ -138,5 +139,5 @@ class AccountApi:
             **kwargs)
         validate_status_code(response, status_code)
         if response.status_code == 200:
-            return UserEnvelope(**response.json())
+            return UserDetailsEnvelope(**response.json())
         return response

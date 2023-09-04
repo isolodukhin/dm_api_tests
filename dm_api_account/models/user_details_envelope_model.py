@@ -1,32 +1,23 @@
 from __future__ import annotations
-
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 from pydantic import BaseModel, Extra, Field, StrictStr
 
 
 class BbParseMode(Enum):
     common = 'Common'
-    info = 'Info'
-    post = 'Post'
-    chat = 'Chat'
+    INFO = 'Info'
+    POST = 'Post'
+    CHAT = 'Chat'
 
 
 class ColorSchema(Enum):
-    modern = 'Modern'
-    pale = 'Pale'
-    classic = 'Classic'
-    classic_pale = 'ClassicPale'
-    night = 'Night'
-
-
-class InfoBbText(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    value: Optional[StrictStr] = Field(None, description='Text')
-    parse_mode: Optional[BbParseMode] = Field(None, alias='parseMode')
+    MODERN = 'Modern'
+    PALE = 'Pale'
+    CLASSIC = 'Classic'
+    CLASSIC_PALE = 'ClassicPale'
+    NIGHT = 'Night'
 
 
 class PagingSettings(BaseModel):
@@ -56,6 +47,15 @@ class PagingSettings(BaseModel):
     )
 
 
+class UserRole(Enum):
+    GUEST = 'Guest'
+    PLAYER = 'Player'
+    ADMINISTRATOR = 'Administrator'
+    NANNY_MODERATOR = 'NannyModerator'
+    REGULAR_MODERATOR = 'RegularModerator'
+    SENIOR_MODERATOR = 'SeniorModerator'
+
+
 class Rating(BaseModel):
     class Config:
         extra = Extra.forbid
@@ -65,13 +65,12 @@ class Rating(BaseModel):
     quantity: Optional[int] = Field(None, description='Quantity rating')
 
 
-class UserRole(Enum):
-    guest = 'Guest'
-    player = 'Player'
-    administrator = 'Administrator'
-    nanny_moderator = 'NannyModerator'
-    regular_moderator = 'RegularModerator'
-    senior_moderator = 'SeniorModerator'
+class InfoBbText(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    value: Optional[StrictStr] = Field(None, description='Text')
+    parse_mode: Optional[BbParseMode] = Field(None, alias='parseMode')
 
 
 class UserSettings(BaseModel):
@@ -112,32 +111,13 @@ class UserDetails(BaseModel):
     original_picture_url: Optional[StrictStr] = Field(
         None, alias='originalPictureUrl', description='URL of profile picture original'
     )
-    info: Optional[InfoBbText] = None
+    info: Optional[Any] = None
     settings: Optional[UserSettings] = None
 
 
-class User(BaseModel):
+class UserDetailsEnvelope(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    login: Optional[StrictStr] = Field(None, description='Login')
-    roles: Optional[List[UserRole]] = Field(None, description='Roles')
-    medium_picture_url: Optional[StrictStr] = Field(
-        None, alias='mediumPictureUrl', description='Profile picture URL M-size'
-    )
-    small_picture_url: Optional[StrictStr] = Field(
-        None, alias='smallPictureUrl', description='Profile picture URL S-size'
-    )
-    status: Optional[StrictStr] = Field(None, description='User defined status')
-    rating: Optional[Rating] = None
-    online: Optional[datetime] = Field(None, description='Last seen online moment')
-    name: Optional[StrictStr] = Field(None, description='User real name')
-    location: Optional[StrictStr] = Field(None, description='User real location')
-    registration: Optional[datetime] = Field(
-        None, description='User registration moment'
-    )
-
-
-class UserDetailsEnvelopeModel(BaseModel):
-    resource: User
-    metadata: Optional[StrictStr] = None
+    resource: Optional[UserDetails] = None
+    metadata: Optional[Any] = Field(None, description='Additional metadata')

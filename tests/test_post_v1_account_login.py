@@ -1,9 +1,6 @@
-from services.dm_api_account import DmApiAccount
-from services.mailhog import MailhogApi
+from services.dm_api_account import Facade
 import structlog
-from dm_api_account.models.registration_model import Registration
-from dm_api_account.models.login_credentials_model import LoginCredentials
-from dm_api_account.models.user_envelope_model import UserRole, Rating
+from dm_api_account.models.user_envelope_model import UserRole
 from hamcrest import *
 
 structlog.configure(
@@ -14,28 +11,22 @@ structlog.configure(
 
 
 def test_post_v1_account_login():
-    mailhog = MailhogApi(host='http://5.63.153.31:5025')
-    api = DmApiAccount(host='http://5.63.153.31:5051')
-    login = "fsk447fewf44"
-    password = "aaaafadad"
-    email = "q58@dqwdq.com"
-    json = Registration(
+    api = Facade(host='http://5.63.153.31:5051')
+    login = "log_in_12"
+    email = "log_in_12@dqwdq.com"
+    password = "aaaaadad"
+
+    api.account.register_new_user(
         login=login,
         email=email,
-        password=password
-    )
-    response = api.account.post_v1_account(json=json)
-    token = mailhog.get_token_from_last_email()
-    response = api.account.put_v1_account_token(token=token)
-    json = LoginCredentials(
+        password=password)
+    api.account.activate_registered_user(login=login)
+    response = api.login.login_user(
         login=login,
-        password=password,
-        rememberMe=False
-    )
-    response = api.login.post_v1_account_login(json=json)
+        password=password)
     assert_that(response.resource, has_properties(
         {
-            "login": "fkw30",
+            "login": "log_in_12",
             "roles": [UserRole.guest, UserRole.player]
         }
     ))
