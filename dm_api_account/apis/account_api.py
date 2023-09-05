@@ -85,7 +85,7 @@ class AccountApi:
             json: ChangePassword,
             status_code: int = 200,
             **kwargs
-    ) -> Response:
+    ) -> Response | UserEnvelope:
         """
         Change registered user password
         :param status_code:
@@ -99,7 +99,8 @@ class AccountApi:
             **kwargs
         )
         validate_status_code(response, status_code)
-        UserEnvelope(**response.json())
+        if response.status_code == 200:
+            return UserEnvelope(**response.json())
         return response
 
     def put_v1_account_token(

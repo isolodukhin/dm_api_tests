@@ -12,10 +12,10 @@ structlog.configure(
 
 def test_post_v1_account_email():
     api = Facade(host='http://5.63.153.31:5051')
-    login = "fkw76fewf498211"
+    login = "fkw76fewf4982111"
     password = "aaaaadad"
-    email = "qwdws799211@dqwdq.com"
-    new_email = '1s7385111@dqwdq.com'
+    email = "qwdws7992111@dqwdq.com"
+    new_email = '1s73851111@dqwdq.com'
     api.account.register_new_user(
         login=login,
         email=email,
@@ -28,7 +28,7 @@ def test_post_v1_account_email():
     )
     assert_that(response.resource, has_properties(
         {
-            "login": "fkw76fewf498211",
+            "login": "fkw76fewf4982111",
             "roles": [UserRole.guest, UserRole.player]
         }
     ))

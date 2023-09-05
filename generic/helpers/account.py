@@ -40,3 +40,23 @@ class Account:
             )
         )
         return response
+
+    def change_user_password(self, login: str, token, old_password: str, new_password: str):
+        response = self.facade.account_api.put_v1_account_password(
+            json=ChangePassword(
+                login=login,
+                token=token,
+                old_password=old_password,
+                new_password=new_password
+            )
+        )
+        return response
+
+    def reset_user_password(self, login: str, email: str):
+        response = self.facade.account_api.post_v1_account_password(
+            json=ResetPassword(
+                login=login,
+                email=email
+            )
+        )
+        return response
