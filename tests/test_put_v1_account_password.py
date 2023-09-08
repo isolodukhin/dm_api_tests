@@ -11,8 +11,8 @@ structlog.configure(
 
 def test_put_v1_account_password():
     api = Facade(host='http://5.63.153.31:5051')
-    login = "log_in_67"
-    email = "log_in_67@dqwdq.com"
+    login = "log_in_80"
+    email = "log_in_80@dqwdq.com"
     password = "aaaaadad"
     new_password = "test12345"
     api.account.register_new_user(
