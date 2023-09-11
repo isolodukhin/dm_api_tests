@@ -1,8 +1,10 @@
-requests
+requests~=2.31.0
 pytest
-structlog
-curlify
-pydantic
+structlog~=23.1.0
+curlify~=2.2.1
+pydantic~=2.3.0
 pyhamcrest
 psycopg2
-records
+records~=0.5.3
+typing~=3.7.4.3
+SQLAlchemy~=1.4.46

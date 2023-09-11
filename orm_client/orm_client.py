@@ -1,36 +1,42 @@
-import records
 import structlog
 import uuid
+from sqlalchemy import create_engine
 
 
-class DbClient:
+class OrmClient:
 
     def __init__(self, user, password, host, database, isolation_level='AUTOCOMMIT'):
         connection_string = f"postgresql://{user}:{password}@{host}/{database}"
-        self.db = records.Database(connection_string, isolation_level=isolation_level)
+        print(connection_string)
+        self.engine = create_engine(connection_string, isolation_level=isolation_level)
+        self.db = self.engine.connect()
         self.log = structlog.get_logger(self.__class__.__name__).bind(service='db')
+
+    def close_connection(self):
+        self.db.close()
 
     def send_query(self, query):
         print(query)
         log = self.log.bind(event_id=str(uuid.uuid4()))
         log.msg(
             event='request',
-            query=query
+            query=str(query)
         )
-        dataset = self.db.query(query=query).as_dict()
+        dataset = self.db.execute(statement=query)
+        result = [row for row in dataset]
         log.msg(
             event='response',
-            dataset=dataset
+            dataset=[dict(row) for row in result]
         )
-        return dataset
+        return result
 
     def send_bulk_query(self, query):
         print(query)
         log = self.log.bind(event_id=str(uuid.uuid4()))
         log.msg(
             event='request',
-            query=query
+            query=str(query)
         )
-        self.db.bulk_query(query=query)
+        self.db.execute(statement=query)
 
 
