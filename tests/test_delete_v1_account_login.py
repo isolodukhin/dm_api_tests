@@ -10,8 +10,8 @@ structlog.configure(
 
 def test_delete_v1_account_login():
     api = Facade(host='http://5.63.153.31:5051')
-    login = "log_in_7"
-    email = "log_in_7@dqwdq.com"
+    login = "log_in_94"
+    email = "log_in_94@dqwdq.com"
     password = "aaaaadad"
 
     api.account.register_new_user(
@@ -22,7 +22,7 @@ def test_delete_v1_account_login():
     api.login.login_user(
         login=login,
         password=password)
-    token = api.login.get_auth_token(login='log_in_7', password='aaaaadad')
+    token = api.login.get_auth_token(login=login, password=password)
     api.login.set_headers(headers=token)
     api.login.logout_user()
 

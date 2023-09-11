@@ -15,8 +15,8 @@ structlog.configure(
 
 def test_post_v1_account():
     api = Facade(host='http://5.63.153.31:5051')
-    login = "log_in_90"
-    email = "log_in_90@dqwdq.com"
+    login = "log_in_93"
+    email = "log_in_93@dqwdq.com"
     password = "aaaaadad"
     db = DmDataBase(user='postgres', password='admin', host='5.63.153.31', database='dm3.5')
     api.account.register_new_user(
@@ -34,11 +34,11 @@ def test_post_v1_account():
     response = api.login.login_user(
         login=login,
         password=password)
-    # assert_that(response.resource, has_properties(
-    #     {
-    #         "login": "log_in_87",
-    #         "roles": [UserRole.guest, UserRole.player]
-    #     }
-    # ))
-    # assert_that(response.resource.rating, not_none())
+    assert_that(response.resource, has_properties(
+        {
+            "login": login,
+            "roles": [UserRole.guest, UserRole.player]
+        }
+    ))
+    assert_that(response.resource.rating, not_none())
     db.delete_user_by_login(login=login)
