@@ -1,28 +1,19 @@
-from services.dm_api_account import Facade
-import structlog
 from hamcrest import *
 from dm_api_account.models.user_envelope_model import UserRole
 
-structlog.configure(
-    processors=[
-        structlog.processors.JSONRenderer(indent=4, sort_keys=True, ensure_ascii=False)
-    ]
-)
 
-
-def test_put_v1_account_token():
-    api = Facade(host='http://5.63.153.31:5051')
-    login = "fkw333"
-    password = "aaaafadad"
-    email = "qwd331@dqwdq.com"
-    api.account.register_new_user(
+def test_put_v1_account_token(dm_api_facade, prepare_user):
+    login = prepare_user.login
+    email = prepare_user.email
+    password = prepare_user.password
+    dm_api_facade.account.register_new_user(
         login=login,
         email=email,
         password=password)
-    response = api.account.activate_registered_user(login=login)
+    response = dm_api_facade.account.activate_registered_user(login=login)
     assert_that(response.resource, has_properties(
         {
-            "login": "fkw333",
+            "login": login,
             "roles": [UserRole.guest, UserRole.player]
         }
     ))
