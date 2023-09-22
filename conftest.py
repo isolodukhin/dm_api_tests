@@ -1,4 +1,7 @@
+import allure
 import pytest
+
+from generic.assertions.post_v1_account import AssertionsPostV1Account
 from generic.helpers.orm_db import OrmDatabase
 from services.dm_api_account import Facade
 import structlog
@@ -45,14 +48,20 @@ def orm_db():
     orm.db.close_connection()
 
 
+@allure.step('Подготовка тестового пользователя')
 @pytest.fixture
 def prepare_user():
     user = namedtuple('User', 'login, email, password')
     User = user(
-        login="log_in_105",
-        email='log_in_105@dqwdq.com',
+        login="log_in_106",
+        email='log_in_106@dqwdq.com',
         password='aaaaadad')
     return User
+
+
+@pytest.fixture()
+def assertions(orm_db):
+    return AssertionsPostV1Account(orm_db)
 
 
 @pytest.fixture(autouse=True)

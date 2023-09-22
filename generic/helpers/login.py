@@ -1,3 +1,4 @@
+import allure
 from dm_api_account.models import LoginCredentials
 
 
@@ -10,14 +11,15 @@ class Login:
         self.facade.login_api.client.session.headers.update(headers)
 
     def login_user(self, login: str, password: str, remember_me: bool = True):
-        response = self.facade.login_api.post_v1_account_login(
-            json=LoginCredentials(
-                login=login,
-                password=password,
-                rememberMe=remember_me
+        with allure.step("Авторизация пользователя"):
+            response = self.facade.login_api.post_v1_account_login(
+                json=LoginCredentials(
+                    login=login,
+                    password=password,
+                    rememberMe=remember_me
+                )
             )
-        )
-        return response
+            return response
 
     def get_auth_token(self, login: str, password: str, remember_me: bool = True):
         response = self.login_user(
