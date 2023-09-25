@@ -1,10 +1,8 @@
-
-
 def test_put_v1_account_password(dm_api_facade, orm_db, prepare_user):
     login = prepare_user.login
     email = prepare_user.email
     password = prepare_user.password
-    new_password = "test12345"
+    new_password = "tests12345"
     dm_api_facade.account.register_new_user(
         login=login,
         email=email,

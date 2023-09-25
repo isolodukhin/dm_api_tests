@@ -53,8 +53,8 @@ def orm_db():
 def prepare_user():
     user = namedtuple('User', 'login, email, password')
     User = user(
-        login="log_in_106",
-        email='log_in_106@dqwdq.com',
+        login="log_in_119",
+        email='log_in_119@dqwdq.com',
         password='aaaaadad')
     return User
 

@@ -6,7 +6,7 @@ def test_post_v1_account_email(dm_api_facade, orm_db, prepare_user):
     login = prepare_user.login
     email = prepare_user.email
     password = prepare_user.password
-    new_email = '1s738511211@dqwdq.com'
+    new_email = '1s733ds@daqwdq.com'
     dm_api_facade.account.register_new_user(
         login=login,
         email=email,

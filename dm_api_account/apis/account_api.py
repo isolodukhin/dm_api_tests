@@ -47,12 +47,12 @@ class AccountApi:
         :param json: reset_password_model
         :return:
         """
-
-        response = self.client.post(
-            path=f"/v1/account/password",
-            json=validate_request_json(json),
-            **kwargs
-        )
+        with allure.step("Сброс пароля зарегестрированного пользователя"):
+            response = self.client.post(
+                path="/v1/account/password",
+                json=validate_request_json(json),
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 200:
             return UserEnvelope(**response.json())
@@ -63,7 +63,7 @@ class AccountApi:
             json: ChangeEmail,
             status_code: int = 200,
             **kwargs
-    ) -> UserEnvelope | Response:
+    ) -> Response | UserEnvelope:
         """
         Change registered user email
         :param status_code:
@@ -71,11 +71,12 @@ class AccountApi:
         :return:
         """
 
-        response = self.client.put(
-            path=f"/v1/account/email",
-            json=validate_request_json(json),
-            **kwargs
-        )
+        with allure.step("Замена email зарегестрированного пользователя"):
+            response = self.client.put(
+                path="/v1/account/email",
+                json=validate_request_json(json),
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 200:
             return UserEnvelope(**response.json())
@@ -94,11 +95,12 @@ class AccountApi:
         :return:
         """
 
-        response = self.client.put(
-            path=f"/v1/account/password",
-            json=validate_request_json(json),
-            **kwargs
-        )
+        with allure.step("Смена пароля зарегистрированного пользователя"):
+            response = self.client.put(
+                path="/v1/account/password",
+                json=validate_request_json(json),
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 200:
             return UserEnvelope(**response.json())
@@ -136,9 +138,11 @@ class AccountApi:
         :return:
         """
 
-        response = self.client.get(
-            path=f"/v1/account",
-            **kwargs)
+        with allure.step("Получить информацию о пользователе"):
+            response = self.client.get(
+                path="/v1/account",
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 200:
             return UserDetailsEnvelope(**response.json())

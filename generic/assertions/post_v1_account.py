@@ -2,6 +2,7 @@ import allure
 from hamcrest import *
 from generic.helpers.orm_db import OrmDatabase
 
+
 class AssertionsPostV1Account:
 
     def __init__(self, orm_db):

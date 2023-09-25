@@ -46,19 +46,19 @@ class RestClient:
             self.session.headers.update(headers)
         self.log = structlog.get_logger(self.__class__.__name__).bind(service='api')
 
-    @allure.attach
+    @allure_attach
     def post(self, path: str, **kwargs) -> Response:
         return self._send_requests('POST', path, **kwargs)
 
-    @allure.attach
+    @allure_attach
     def get(self, path: str, **kwargs) -> Response:
         return self._send_requests('GET', path, **kwargs)
 
-    @allure.attach
+    @allure_attach
     def put(self, path: str, **kwargs) -> Response:
         return self._send_requests('PUT', path, **kwargs)
 
-    @allure.attach
+    @allure_attach
     def delete(self, path: str, **kwargs) -> Response:
         return self._send_requests('DELETE', path, **kwargs)
 
