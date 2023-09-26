@@ -1,7 +1,7 @@
 from requests import Response
-from ..models import *
-from restclient.restclient import RestClient
-from dm_api_account.models.user_envelope_model import UserEnvelope
+from common_libs.restclient.restclient import RestClient
+from apis.dm_api_account.models.user_envelope_model import UserEnvelope
+from ..models.login_credentials_model import LoginCredentials
 from ..utilities import validate_request_json, validate_status_code
 import allure
 

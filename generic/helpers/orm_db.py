@@ -1,8 +1,8 @@
 from sqlalchemy import select, delete, update
 from typing import List
 
+from common_libs.orm_client.orm_client import OrmClient
 from generic.helpers.orm_models import User
-from orm_client.orm_client import OrmClient
 import allure
 
 class OrmDatabase:

@@ -9,6 +9,7 @@ from generic.helpers.mailhog import MailhogApi
 from collections import namedtuple
 from vyper import v
 from pathlib import Path
+from data.post_v1_account import PostV1AccountData as user_data
 
 structlog.configure(
     processors=[
@@ -53,9 +54,9 @@ def orm_db():
 def prepare_user():
     user = namedtuple('User', 'login, email, password')
     User = user(
-        login="log_in_119",
-        email='log_in_119@dqwdq.com',
-        password='aaaaadad')
+        login=user_data.login,
+        email=user_data.email,
+        password=user_data.password)
     return User
 
 

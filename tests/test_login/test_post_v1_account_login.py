@@ -1,12 +1,12 @@
-from dm_api_account.models.user_envelope_model import UserRole
+
+from apis.dm_api_account.models.user_envelope_model import UserRole
 from hamcrest import *
 
 
-def test_post_v1_account_email(dm_api_facade, orm_db, prepare_user):
+def test_post_v1_account_login(dm_api_facade,orm_db, prepare_user):
     login = prepare_user.login
     email = prepare_user.email
     password = prepare_user.password
-    new_email = '1s733ds@daqwdq.com'
     dm_api_facade.account.register_new_user(
         login=login,
         email=email,
@@ -19,18 +19,14 @@ def test_post_v1_account_email(dm_api_facade, orm_db, prepare_user):
     dataset = orm_db.get_user_by_login(login=login)
     for row in dataset:
         assert row['Activated'] is True, f'User {login} not activated'
-    response = dm_api_facade.account.change_user_email(
+    response = dm_api_facade.login.login_user(
         login=login,
-        password=password,
-        email=new_email
-    )
+        password=password)
     assert_that(response.resource, has_properties(
         {
-            "login": "fkw76fewf4982111",
+            "login": "log_in_12",
             "roles": [UserRole.guest, UserRole.player]
         }
     ))
     assert_that(response.resource.rating, not_none())
     orm_db.delete_user_by_login(login=login)
-
-

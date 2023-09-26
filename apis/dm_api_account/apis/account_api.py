@@ -1,8 +1,8 @@
 import allure
 from requests import Response
 from ..models import *
-from dm_api_account.models.user_details_envelope_model import UserDetailsEnvelope
-from restclient.restclient import RestClient
+from apis.dm_api_account.models.user_details_envelope_model import UserDetailsEnvelope
+from common_libs.restclient.restclient import RestClient
 from ..utilities import validate_request_json, validate_status_code
 
 
