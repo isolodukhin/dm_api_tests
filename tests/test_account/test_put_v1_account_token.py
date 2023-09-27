@@ -1,5 +1,5 @@
 from hamcrest import *
-from apis.dm_api_account.models.user_envelope_model import UserRole
+from dm_api_account.models.user_envelope_model import UserRole
 
 
 def test_put_v1_account_token(dm_api_facade, prepare_user):

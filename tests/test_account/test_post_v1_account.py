@@ -1,6 +1,6 @@
 import allure
 import pytest
-from apis.dm_api_account.models.user_envelope_model import UserRole
+from dm_api_account.models.user_envelope_model import UserRole
 from hamcrest import *
 from string import ascii_letters, digits
 import random
@@ -109,11 +109,11 @@ class TestsPostV1Account:
         orm_db.set_user_activated_true_by_login(login=login)
         assertions.check_user_was_activated(login=login)
         response = dm_api_facade.login.login_user(login=login, password=password)
-        # assert_that(response.resource, has_properties(
-        #     {
-        #         "login": login,
-        #         "roles": [UserRole.guest, UserRole.player]
-        #     }
-        # ))
-        # assert_that(response.resource.rating, not_none())
+        assert_that(response.resource, has_properties(
+            {
+                "login": login,
+                "roles": [UserRole.guest, UserRole.player]
+            }
+        ))
+        assert_that(response.resource.rating, not_none())
         orm_db.delete_user_by_login(login=login)

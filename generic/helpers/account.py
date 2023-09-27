@@ -1,4 +1,4 @@
-from apis.dm_api_account.models import *
+from dm_api_account.models import *
 
 try:
     from services.dm_api_account import Facade
@@ -8,7 +8,7 @@ except ImportError:
 
 class Account:
     def __init__(self, facade):
-        self.facade: Facade = facade
+        self.facade = facade
 
     def set_headers(self, headers):
         self.facade.account_api.client.session.headers.update(headers)

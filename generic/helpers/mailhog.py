@@ -2,11 +2,11 @@ import json
 import time
 
 from requests import Response
-from common_libs.restclient.restclient import RestClient
+from restclient.restclient import Restclient
 import allure
 
-def decorator(fn):
 
+def decorator(fn):
     def wrapper(*args, **kwargs):
         for i in range(5):
             response = fn(*args, **kwargs)
