@@ -1,4 +1,4 @@
 class PostV1AccountData:
-    login = 'log_in_120'
-    email = 'log_in_120@dqwdq.com'
+    login = 'log_in_123'
+    email = 'log_in_123@dqwdq.com'
     password = 'aaaaadad'
