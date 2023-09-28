@@ -6,11 +6,7 @@ import allure
 
 def allure_attach_db(fn):
     def wrapper(self, query):
-        log = self.log.bind(event_id=str(uuid.uuid4()))
-        log.msg(
-            event='request',
-            query=str(query)
-        )
+
         allure.attach(
             str(query),
             name='query',
@@ -22,10 +18,6 @@ def allure_attach_db(fn):
         if result is None:
             return None
 
-        log.msg(
-            event='response',
-            dataset=[dict(row) for row in result]
-        )
         return result
 
     return wrapper
