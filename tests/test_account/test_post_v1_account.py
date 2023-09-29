@@ -116,4 +116,4 @@ class TestsPostV1Account:
             }
         ))
         assert_that(response.resource.rating, not_none())
-        orm_db.delete_user_by_login(login=login)
+

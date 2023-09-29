@@ -22,6 +22,6 @@ def test_get_v1_account(dm_api_facade, orm_db, prepare_user):
     dm_api_facade.account.set_headers(headers=token)
     dm_api_facade.login.set_headers(headers=token)
     dm_api_facade.account.get_current_user_info()
-    orm_db.delete_user_by_login(login=login)
+
 
 

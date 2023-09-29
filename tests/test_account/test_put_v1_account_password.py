@@ -25,6 +25,6 @@ def test_put_v1_account_password(dm_api_facade, orm_db, prepare_user):
         token=token,
         old_password=password,
         new_password=new_password)
-    orm_db.delete_user_by_login(login=login)
+
 
 
