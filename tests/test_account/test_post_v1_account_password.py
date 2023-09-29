@@ -19,7 +19,7 @@ def test_post_v1_account_password(dm_api_facade, orm_db, prepare_user):
         login=login,
         email=email
     )
-    orm_db.delete_user_by_login(login=login)
+
 
 
 

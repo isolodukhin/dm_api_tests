@@ -51,12 +51,16 @@ def orm_db():
 
 @allure.step('Подготовка тестового пользователя')
 @pytest.fixture
-def prepare_user():
+def prepare_user(dm_api_facade, orm_db):
     user = namedtuple('User', 'login, email, password')
     User = user(
         login=user_data.login,
         email=user_data.email,
         password=user_data.password)
+    orm_db.delete_user_by_login(login=user_data.login)
+    dataset = orm_db.get_user_by_login(user_data.login)
+    assert len(dataset) == 0
+    dm_api_facade.mailhog.delete_all_messages()
     return User
 
 

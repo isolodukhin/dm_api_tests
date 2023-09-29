@@ -5,8 +5,8 @@ from requests import Response
 from common_libs.restclient.restclient import RestClient
 import allure
 
-def decorator(fn):
 
+def decorator(fn):
     def wrapper(*args, **kwargs):
         for i in range(5):
             response = fn(*args, **kwargs)
@@ -65,10 +65,10 @@ class MailhogApi:
                     token = user_data['ConfirmationLinkUrl'].split('/')[-1]
                     print(token)
                     return token
-            time.sleep(2)
+                time.sleep(2)
             return self.get_token_by_login(login=login, attempt=attempt - 1)
 
-    def get_reset_password_token_by_login(self, login: str, attempt=50):
+    def get_reset_password_token_by_login(self, login: str, attempt=5):
         with allure.step("Получить токен сбрасывания пароля по логину"):
             if attempt == 0:
                 raise AssertionError(f'Не удалось получить письмо с логином {login}')
@@ -79,7 +79,7 @@ class MailhogApi:
                     token = user_data['ConfirmationLinkUri'].split('/')[-1]
                     print(token)
                     return token
-        time.sleep(2)
+            time.sleep(2)
         return self.get_token_by_login(login=login, attempt=attempt - 1)
 
     def delete_all_messages(self):
