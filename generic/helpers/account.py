@@ -1,22 +1,17 @@
 from dm_api_account.models import *
 
-try:
-    from services.dm_api_account import Facade
-except ImportError:
-    ...
-
 
 class Account:
     def __init__(self, facade):
-        self.facade = facade
+        from services.dm_api_account import Facade
+        self.facade: Facade = facade
 
     def set_headers(self, headers):
         self.facade.account_api.client.session.headers.update(headers)
 
-    def register_new_user(self, login: str, email: str, password: str, status_code: int = 201):
-        response = self.facade.account_api.post_v1_account(
-            status_code=status_code,
-            json=Registration(
+    def register_new_user(self, login: str, email: str, password: str):
+        response = self.facade.account_api.register(
+            registration=Registration(
                 login=login,
                 email=email,
                 password=password
@@ -27,7 +22,7 @@ class Account:
 
     def activate_registered_user(self, login: str):
         token = self.facade.mailhog.get_token_by_login(login=login)
-        response = self.facade.account_api.put_v1_account_token(
+        response = self.facade.account_api.activate(
             token=token
         )
         return response
@@ -37,8 +32,8 @@ class Account:
         return response
 
     def change_user_email(self, login: str, password: str, email: str):
-        response = self.facade.account_api.put_v1_account_email(
-            json=ChangeEmail(
+        response = self.facade.account_api.change_email(
+            change_email=ChangeEmail(
                 login=login,
                 password=password,
                 email=email
@@ -47,8 +42,8 @@ class Account:
         return response
 
     def change_user_password(self, login: str, token, old_password: str, new_password: str):
-        response = self.facade.account_api.put_v1_account_password(
-            json=ChangePassword(
+        response = self.facade.account_api.change_password(
+            change_password=ChangePassword(
                 login=login,
                 token=token,
                 old_password=old_password,
@@ -58,8 +53,8 @@ class Account:
         return response
 
     def reset_user_password(self, login: str, email: str):
-        response = self.facade.account_api.post_v1_account_password(
-            json=ResetPassword(
+        response = self.facade.account_api.reset_password(
+            reset_password=ResetPassword(
                 login=login,
                 email=email
             )

@@ -2,7 +2,7 @@ import json
 import time
 
 from requests import Response
-from restclient.restclient import Restclient
+from restclient.restclient import RestClient
 import allure
 
 

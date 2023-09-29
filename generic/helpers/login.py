@@ -12,11 +12,11 @@ class Login:
 
     def login_user(self, login: str, password: str, remember_me: bool = True):
         with allure.step("Авторизация пользователя"):
-            response = self.facade.login_api.post_v1_account_login(
-                json=LoginCredentials(
+            response = self.facade.login_api.v1_account_login_post(
+                login_credentials=LoginCredentials(
                     login=login,
                     password=password,
-                    rememberMe=remember_me
+                    remember_me=remember_me
                 )
             )
             return response
@@ -30,10 +30,9 @@ class Login:
         return token
 
     def logout_user(self, **kwargs):
-        response = self.facade.login_api.delete_v1_account_login(**kwargs)
+        response = self.facade.login_api.v1_account_login_delete(**kwargs)
         return response
 
     def logout_user_from_all_devices(self, **kwargs):
-        response = self.facade.login_api.delete_v1_account_login_all(**kwargs)
+        response = self.facade.login_api.v1_account_login_all_delete(**kwargs)
         return response
-
