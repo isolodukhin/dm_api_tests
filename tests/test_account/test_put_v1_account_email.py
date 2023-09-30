@@ -26,7 +26,7 @@ def test_post_v1_account_email(dm_api_facade, orm_db, prepare_user):
     )
     assert_that(response.resource, has_properties(
         {
-            "login": "fkw76fewf4982111",
+            "login": login,
             "roles": [UserRole.guest, UserRole.player]
         }
     ))

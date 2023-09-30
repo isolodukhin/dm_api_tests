@@ -1,6 +1,5 @@
 import allure
 import pytest
-from dm_api_account.models.user_envelope_model import UserRole
 from hamcrest import *
 from string import ascii_letters, digits
 import random
@@ -19,7 +18,7 @@ def random_string(count_of_symbols=8):
 class TestsPostV1Account:
 
     @pytest.mark.parametrize('login, email, password, status_code, check', [
-        (random_string(3), '16612@12.ru', random_string(6), 201, ''),
+        (random_string(3), '166132@12.ru', random_string(6), 201, ''),
         (random_string(3), '144@12.ru', random_string(5), 400, {"Password": ["Short"]}),
         (random_string(1), '153@12.ru', random_string(6), 400, {"Login": ["Short"]}),
         (random_string(3), '12@', random_string(6), 400, {"Email": ["Invalid"]}),
@@ -83,15 +82,8 @@ class TestsPostV1Account:
         assertions.check_user_was_created(login=login)
         orm_db.set_user_activated_true_by_login(login=login)
         assertions.check_user_was_activated(login=login)
-        response = dm_api_facade.login.login_user(login=login, password=password)
-        assert_that(response.resource, has_properties(
-            {
-                "login": login,
-                "roles": [UserRole.guest, UserRole.player]
-            }
-        ))
-        assert_that(response.resource.rating, not_none())
-        orm_db.delete_user_by_login(login=login)
+        dm_api_facade.login.login_user(login=login, password=password)
+
 
     @allure.title("Проверка регистрации и активации пользователя")
     def test_create_and_activate_user_with_random_params_2(
@@ -108,12 +100,6 @@ class TestsPostV1Account:
         assertions.check_user_was_created(login=login)
         orm_db.set_user_activated_true_by_login(login=login)
         assertions.check_user_was_activated(login=login)
-        response = dm_api_facade.login.login_user(login=login, password=password)
-        assert_that(response.resource, has_properties(
-            {
-                "login": login,
-                "roles": [UserRole.guest, UserRole.player]
-            }
-        ))
-        assert_that(response.resource.rating, not_none())
+        dm_api_facade.login.login_user(login=login, password=password)
+
 

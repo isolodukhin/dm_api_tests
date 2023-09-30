@@ -24,7 +24,7 @@ def test_post_v1_account_login(dm_api_facade,orm_db, prepare_user):
         password=password)
     assert_that(response.resource, has_properties(
         {
-            "login": "log_in_12",
+            "login": login,
             "roles": [UserRole.guest, UserRole.player]
         }
     ))

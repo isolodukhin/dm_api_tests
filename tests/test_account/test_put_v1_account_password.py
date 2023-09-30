@@ -1,3 +1,7 @@
+from dm_api_account.models.user_envelope_model import UserRole
+from hamcrest import *
+
+
 def test_put_v1_account_password(dm_api_facade, orm_db, prepare_user):
     login = prepare_user.login
     email = prepare_user.email
@@ -20,11 +24,15 @@ def test_put_v1_account_password(dm_api_facade, orm_db, prepare_user):
         email=email
     )
     token = dm_api_facade.mailhog.get_reset_password_token_by_login(login=login)
-    dm_api_facade.account.change_user_password(
+    response = dm_api_facade.account.change_user_password(
         login=login,
         token=token,
         old_password=password,
         new_password=new_password)
-
-
-
+    assert_that(response.resource, has_properties(
+        {
+            "login": login,
+            "roles": [UserRole.guest, UserRole.player]
+        }
+    ))
+    assert_that(response.resource.rating, not_none())

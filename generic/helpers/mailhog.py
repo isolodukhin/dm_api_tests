@@ -2,7 +2,7 @@ import json
 import time
 
 from requests import Response
-from restclient.restclient import Restclient
+from restclient.restclient import RestClient
 import allure
 
 
@@ -26,21 +26,22 @@ class MailhogApi:
         self.host = host
         self.client = RestClient(host=host)
 
-    @decorator
-    def get_api_v2_messages(self, limit: int = 50) -> Response:
+
+    def get_api_v2_messages(self, limit: int = 5) -> Response:
         """
         Get messages by limit
         :param limit:
         :return:
         """
         with allure.step(f"Получить {limit} писем"):
+            time.sleep(2)
             response = self.client.get(
                 path=f"/api/v2/messages",
                 params={
                     'limit': limit
                 }
             )
-
+        print('RESPONSE:', response.json())
         return response
 
     def get_token_from_last_email(self) -> str:
@@ -54,11 +55,11 @@ class MailhogApi:
             token = token_url.split('/')[-1]
         return token
 
-    def get_token_by_login(self, login: str, attempt=50):
+    def get_token_by_login(self, login: str, attempt=5):
         with allure.step("Получить токен по логину"):
             if attempt == 0:
                 raise AssertionError(f'Не удалось получить письмо с логином {login}')
-            emails = decorator(self.get_api_v2_messages)(100).json()['items']
+            emails = decorator(self.get_api_v2_messages)(50).json()['items']
             for email in emails:
                 user_data = json.loads(email['Content']['Body'])
                 if login == user_data.get('Login'):
@@ -66,21 +67,21 @@ class MailhogApi:
                     print(token)
                     return token
             time.sleep(2)
-            return self.get_token_by_login(login=login, attempt=attempt - 1)
+        return self.get_token_by_login(login=login, attempt=attempt - 1)
 
-    def get_reset_password_token_by_login(self, login: str, attempt=50):
+    def get_reset_password_token_by_login(self, login: str, attempt=5):
         with allure.step("Получить токен сбрасывания пароля по логину"):
             if attempt == 0:
                 raise AssertionError(f'Не удалось получить письмо с логином {login}')
-            emails = decorator(self.get_api_v2_messages)(100).json()['items']
+            emails = self.get_api_v2_messages(50).json()['items']
             for email in emails:
                 user_data = json.loads(email['Content']['Body'])
                 if login == user_data.get('Login'):
                     token = user_data['ConfirmationLinkUri'].split('/')[-1]
                     print(token)
                     return token
-        time.sleep(2)
-        return self.get_token_by_login(login=login, attempt=attempt - 1)
+            time.sleep(2)
+        return self.get_reset_password_token_by_login(login=login, attempt=attempt - 1)
 
     def delete_all_messages(self):
         with allure.step("Удалить все сообщения"):
