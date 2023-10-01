@@ -61,9 +61,9 @@ class TestsPostV1Account:
             assert_that(error_message, has_entries(check))
         orm_db.delete_user_by_login(login=login)
 
-    @pytest.mark.parametrize('login', [random_string() for _ in range(3)])
-    @pytest.mark.parametrize('email', [random_string() + '@' + random_string() + '.ru' for _ in range(3)])
-    @pytest.mark.parametrize('password', [random_string() for _ in range(3)])
+    @pytest.mark.parametrize('login', [random_string(8) for _ in range(3)])
+    @pytest.mark.parametrize('email', [random_string(8) + '@' + random_string(8) + '.ru' for _ in range(3)])
+    @pytest.mark.parametrize('password', [random_string(8) for _ in range(3)])
     def test_register_and_activate_user(self, dm_api_facade, orm_db, login, email, password, assertions):
         """
         Тест проверяет создание и активацию пользователя в базе данных
@@ -83,6 +83,7 @@ class TestsPostV1Account:
         orm_db.set_user_activated_true_by_login(login=login)
         assertions.check_user_was_activated(login=login)
         dm_api_facade.login.login_user(login=login, password=password)
+        orm_db.delete_user_by_login(login=login)
 
 
     @allure.title("Проверка регистрации и активации пользователя")

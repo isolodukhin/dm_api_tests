@@ -59,7 +59,7 @@ class MailhogApi:
         with allure.step("Получить токен по логину"):
             if attempt == 0:
                 raise AssertionError(f'Не удалось получить письмо с логином {login}')
-            emails = decorator(self.get_api_v2_messages)(50).json()['items']
+            emails = self.get_api_v2_messages(50).json()['items']
             for email in emails:
                 user_data = json.loads(email['Content']['Body'])
                 if login == user_data.get('Login'):
