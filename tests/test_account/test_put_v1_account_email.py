@@ -2,7 +2,7 @@ from apis.dm_api_account.models.user_envelope_model import UserRole
 from hamcrest import *
 
 
-def test_post_v1_account_email(dm_api_facade, orm_db, prepare_user):
+def test_put_v1_account_email(dm_api_facade, orm_db, prepare_user):
     login = prepare_user.login
     email = prepare_user.email
     password = prepare_user.password
@@ -26,7 +26,7 @@ def test_post_v1_account_email(dm_api_facade, orm_db, prepare_user):
     )
     assert_that(response.resource, has_properties(
         {
-            "login": "fkw76fewf4982111",
+            "login": login,
             "roles": [UserRole.guest, UserRole.player]
         }
     ))

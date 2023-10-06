@@ -26,7 +26,7 @@ class MailhogApi:
         self.host = host
         self.client = RestClient(host=host)
 
-    @decorator
+
     def get_api_v2_messages(self, limit: int = 50) -> Response:
         """
         Get messages by limit
@@ -58,7 +58,7 @@ class MailhogApi:
         with allure.step("Получить токен по логину"):
             if attempt == 0:
                 raise AssertionError(f'Не удалось получить письмо с логином {login}')
-            emails = decorator(self.get_api_v2_messages)(100).json()['items']
+            emails = self.get_api_v2_messages(100).json()['items']
             for email in emails:
                 user_data = json.loads(email['Content']['Body'])
                 if login == user_data.get('Login'):
@@ -72,7 +72,7 @@ class MailhogApi:
         with allure.step("Получить токен сбрасывания пароля по логину"):
             if attempt == 0:
                 raise AssertionError(f'Не удалось получить письмо с логином {login}')
-            emails = decorator(self.get_api_v2_messages)(100).json()['items']
+            emails = self.get_api_v2_messages(100).json()['items']
             for email in emails:
                 user_data = json.loads(email['Content']['Body'])
                 if login == user_data.get('Login'):
@@ -80,7 +80,7 @@ class MailhogApi:
                     print(token)
                     return token
             time.sleep(2)
-        return self.get_token_by_login(login=login, attempt=attempt - 1)
+        return self.get_reset_password_token_by_login(login=login, attempt=attempt - 1)
 
     def delete_all_messages(self):
         with allure.step("Удалить все сообщения"):

@@ -1,7 +1,10 @@
 import allure
+import grpc
 import pytest
 
 from generic.assertions.post_v1_account import AssertionsPostV1Account
+from generic.helpers.account_grpc import AccountGrpc
+
 from generic.helpers.orm_db import OrmDatabase
 from services.dm_api_account import Facade
 import structlog
@@ -10,6 +13,8 @@ from collections import namedtuple
 from vyper import v
 from pathlib import Path
 from data.post_v1_account import PostV1AccountData as user_data
+from apis.dm_api_account_async import AccountServiceStub
+from grpclib.client import Channel
 
 structlog.configure(
     processors=[
@@ -47,6 +52,21 @@ def orm_db():
     )
     yield orm
     orm.db.close_connection()
+
+
+@pytest.fixture
+def grpc_account():
+    client = AccountGrpc(target='5.63.153.31:5055')
+    yield client
+    client.close()
+
+
+@pytest.fixture
+def grpc_account_async():
+    channel = Channel(host='5.63.153.31', port=5055)
+    client = AccountServiceStub(channel)
+    yield client
+    channel.close()
 
 
 @allure.step('Подготовка тестового пользователя')

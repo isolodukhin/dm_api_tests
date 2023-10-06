@@ -18,7 +18,7 @@ def random_string(count_of_symbols=8):
 class TestsPostV1Account:
 
     @pytest.mark.parametrize('login, email, password, status_code, check', [
-        (random_string(3), '16612@12.ru', random_string(6), 201, ''),
+        (random_string(3), '1a7@12.ru', random_string(6), 201, ''),
         (random_string(3), '144@12.ru', random_string(5), 400, {"Password": ["Short"]}),
         (random_string(1), '153@12.ru', random_string(6), 400, {"Login": ["Short"]}),
         (random_string(3), '12@', random_string(6), 400, {"Email": ["Invalid"]}),
